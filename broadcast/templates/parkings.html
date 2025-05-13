@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Available CSs{% endblock %}
+{% block styles %}
+<style>
+    #header {
+        height: 130px;
+    }
+
+    #scroll-container {
+        height: 280px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    #scroll-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #scroll-container::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="header">
+    <h2 class="m-3 text-center">Available Parkings</h2>
+    <div class="row justify-content-center mb-3">
+    </div>
+</div>
+<div class="row" id="scroll-container">
+    <div id="parkSlots" class="px-2">
+        <p>Loading parkings...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/evId.js"></script>
+<script>
+    async function loadParkings() {
+        const response = await fetch("/static/data/parkSlots.json");
+        const parkings = await response.json();
+        renderSlots(parkings);
+    }
+
+    function renderSlots(slots) {
+        const listContainer = document.getElementById("parkSlots");
+        listContainer.innerHTML = "";
+
+        slots.forEach(slot => {
+            if (slot.status === "Available") {
+                const row = document.createElement("div");
+                row.className = "row mb-3";
+
+                const a = document.createElement("a");
+                a.href = `#`;
+
+                a.onclick = function () {
+                    alert(`This parking is booked`);
+                };
+
+                a.className = "text-decoration-none text-dark";
+
+                const card = document.createElement("div");
+                card.className = "card p-3 shadow-sm bg-body rounded";
+                card.style.borderColor = "transparent";
+
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">${slot.name}</h5>
+                            <p class="mb-1">📍 ${slot.location} | ${slot.distance_km} km away</p>
+                            <span class="badge bg-primary ">${slot.slots.available}/${slot.slots.total}</span>
+                        </div>
+                    </div>
+                `;
+
+                a.appendChild(card);
+                row.appendChild(a);
+                listContainer.appendChild(row);
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", loadParkings);
+</script>
+{% endblock %}

@@ -1,0 +1,16 @@
+[
+  { "id": 1, "name": "Parking A", "location": "Downtown", "status": "Available", "distance_km": 1.2, "position": [5, 5],
+  "slots": {"available": 37, "total": 50 }},
+  { "id": 2, "name": "Parking B", "location": "Uptown", "status": "Available", "distance_km": 3.5, "position": [10, 15],
+  "slots": {"available": 4, "total": 25 }},
+  { "id": 3, "name": "Parking C", "location": "Suburb", "status": "Occupied", "distance_km": 6.8, "position": [2, 18],
+  "slots": {"available": 42, "total": 65 } },
+  { "id": 4, "name": "Parking D", "location": "Riverside", "status": "Available", "distance_km": 5.1, "position": [18, 3],
+  "slots": {"available": 1, "total": 15 } },
+  { "id": 5, "name": "Parking E", "location": "Tech Park", "status": "Available", "distance_km": 7.2, "position": [9, 9],
+  "slots": {"available": 27, "total": 54 } },
+  { "id": 6, "name": "Parking F", "location": "Airport", "status": "Occupied", "distance_km": 3.8, "position": [0, 0],
+  "slots": {"available": 8, "total": 45 } },
+  { "id": 7, "name": "Parking G", "location": "Hotel", "status": "Available", "distance_km": 10.4, "position": [3, 7],
+  "slots": {"available": 45, "total": 168 } }]
+

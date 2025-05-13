@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Charge Request{% endblock %}
+{% block styles %}
+<style>
+    #header {
+        height: 65px;
+    }
+
+    #mainContainer {
+        height: 321px;
+        padding-right: 10px;
+    }
+
+    .card {
+        border-radius: 12px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="header">
+    <h2 class="text-center m-3">Charge Request</h2>
+</div>
+<div class="p-4 mt-4 text-center" id="mainContainer">
+    <div id="chargeVal" class="row row-cols-3 g-5"></div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const chargeLevels = [5, 10, 15, 20, 25, 30, 35, 40, 45];
+    const buttonContainer = document.getElementById('chargeVal');
+
+    chargeLevels.forEach(level => {
+        const col = document.createElement('div');
+        col.className = 'col';
+
+        const button = document.createElement('button');
+        button.className = 'btn btn-lg btn-light w-100 charge-btn';
+        button.textContent = level + `%`;
+        button.onclick = () => {
+            socket.emit("chargeReq", level);
+            alert(`Requesting ${level}% charge from nearby EVs...`);
+        };
+
+        col.appendChild(button);
+        buttonContainer.appendChild(col);
+    });
+
+    socket.on("ChargeReqSelf", function (value) {
+            console.log("self Charge Request: " + value);
+        })
+
+</script>
+{% endblock %}

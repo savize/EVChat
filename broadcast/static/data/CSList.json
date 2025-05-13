@@ -1,0 +1,27 @@
+[
+  { "id": 1, "name": "Station A", "location": "Downtown", "status": "Available", "distance_km": 1.2, "fast_charging": true, "available_ports": 3, "position": [5, 5],  "ports": [
+    { "type": "CHAdeMO", "power_kW": 50, "available": 1, "total": 2 },
+    { "type": "CCS", "power_kW": 50, "available": 0, "total": 2 },
+    { "type": "Type 2", "power_kW": 22, "available": 1, "total": 2 }
+  ] },
+  { "id": 2, "name": "Station B", "location": "Uptown", "status": "Occupied", "distance_km": 3.5, "fast_charging": false, "available_ports": 0, "position": [10, 15],  "ports": [
+    { "type": "CCS", "power_kW": 50, "available": 0, "total": 3 },
+    { "type": "Type 2", "power_kW": 22, "available": 1, "total": 3 }
+  ] },
+  { "id": 3, "name": "Station C", "location": "Suburb", "status": "Available", "distance_km": 7.8, "fast_charging": true, "available_ports": 2, "position": [2, 18], "ports": [
+    { "type": "CHAdeMO", "power_kW": 50, "available": 1, "total": 3 },
+    { "type": "CCS", "power_kW": 50, "available": 2, "total": 3 }
+  ] },
+  { "id": 4, "name": "Station D", "location": "Riverside", "status": "Available", "distance_km": 5.1, "fast_charging": false, "available_ports": 1, "position": [18, 3], "ports": [
+    { "type": "CHAdeMO", "power_kW": 50, "available": 1, "total": 4 },
+    { "type": "CCS", "power_kW": 50, "available": 0, "total": 4 }
+  ]},
+  { "id": 5, "name": "Station E", "location": "Tech Park", "status": "Occupied", "distance_km": 2.3, "fast_charging": true, "available_ports": 0, "position": [9, 9], "ports": [
+    { "type": "CHAdeMO", "power_kW": 50, "available": 1, "total": 2 },
+    { "type": "Type 2", "power_kW": 22, "available": 1, "total": 2 }
+  ] },
+  { "id": 6, "name": "Station F", "location": "Airport", "status": "Available", "distance_km": 12.4, "fast_charging": true, "available_ports": 4, "position": [0, 0], "ports": [
+    { "type": "CCS", "power_kW": 50, "available": 0, "total": 4 },
+    { "type": "Type 2", "power_kW": 22, "available": 1, "total": 4 }
+  ] }
+]

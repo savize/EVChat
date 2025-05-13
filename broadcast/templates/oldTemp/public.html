@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Chat</title>
+    <title>Public Chat</title>
     <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"
         integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+"
         crossorigin="anonymous"></script>
@@ -15,21 +15,6 @@
         crossorigin="anonymous"></script>
 
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #e5e5e5;
-        }
-
-        #chatbox {
-            width: 50%;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
         ul {
             height: 300px;
             overflow-y: scroll;
@@ -49,41 +34,62 @@
 </head>
 
 <body>
-    <div id="chatbox">
-        <h2>Chat with <span id="recipient">{{ username }}</span></h2>
-        <ul id="chat-messages">
-        </ul>
-        <input type="text" id="message" placeholder="Type your Message">
-        <div class="d-flex bd-highlight mb-3 mt-3">
-            <button class="me-auto p-2 bd-highlight" id="send">Send</button>
-            <button class="p-2 bd-highlight" onclick="goBack()">Back</button>
+    <div style="height: 3rem;"></div>
+    <div id="chat" class="container-fluid row justify-content-center align-content-center">
+        <div class="col-6  m-5 p-3 shadow-lg"
+            style="width: 38rem; border-radius: 25px; border-color: transparent; background-color: rgb(202, 240, 248);">
+            <h2 class="mt-2 text-center">Broadcast Space</h2>
+            <ul id="chat-messages">
+            </ul>
+            <div class="input-group">
+                <input type="text" id="message" class="form-control" placeholder="Type your Message">
+            </div>
+            <div class="d-flex bd-highlight mb-3 mt-3">
+                <button class="me-auto p-2 bd-highlight btn btn-light" onclick="sendMsg()">Send</button>
+                <button class="p-2 bd-highlight btn btn-light" onclick="goBack()">Back</button>
+            </div>
         </div>
     </div>
 
     <script>
         const socket = io({ autoConnect: false });
+        let recipient = "";
+        let sender = "";
+        const rec = new URLSearchParams(window.location.search);
+        sender = rec.get("sender");
 
-        function goBack() {
-            window.location.href = "/";
+        document.addEventListener("DOMContentLoaded", function () {
+            socket.connect();
+
+            if (sender) {
+                socket.emit("user_join", sender);}
+        })
+
+        function sendMsg() {
+            let message = document.getElementById("message").value;
+            socket.emit("new_message", message);
+            document.getElementById("message").value = "";
         }
 
         document.getElementById("message").addEventListener("keyup", function (event) {
             if (event.key == "Enter") {
-                socket.connect();
-                let recipient = document.getElementById("recipient").textContent;
-                let message = document.getElementById("message").value;
-                socket.emit("private_message", { message: message, recipient: recipient });
-                document.getElementById("message").value = "";
+                socket.emit("rnd_message");
             }
         })
 
-        socket.on("private_chat", function (data) {
+        socket.on("chat", function (data) {
             let ul = document.getElementById("chat-messages");
             let li = document.createElement("li");
+
             li.appendChild(document.createTextNode(data["username"] + ": " + data["message"]));
             ul.appendChild(li);
             ul.scrolltop = ul.scrollHeight;
-        });
+        })
+
+
+        function goBack() {
+            window.location.href = "/";
+        }
 
     </script>
 </body>

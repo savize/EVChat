@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block title %}Available CSs{% endblock %}
+{% block styles %}
+<style>
+    #header {
+        height: 130px;
+    }
+
+    #scroll-container {
+        height: 280px;
+        overflow-y: auto;
+        padding-right: 10px;
+    }
+
+    #scroll-container::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #scroll-container::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="header">
+    <h2 class="m-3 text-center">Available Charging Stations</h2>
+    <div class="row justify-content-center mb-3">
+        <div class="col-auto mt-2">
+            <button id="auto" type="button" class="btn btn-dark px-4">Closest Station</button>
+        </div>
+    </div>
+</div>
+<div class="row" id="scroll-container">
+    <div id="cs-list" class="px-2">
+        <p>Loading stations...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/evId.js"></script>
+<script>
+    async function loadStations() {
+        const response = await fetch("/static/data/CSList.json");
+        const stations = await response.json();
+        renderStations(stations);
+    }
+
+    function renderStations(stations) {
+        const listContainer = document.getElementById("cs-list");
+        listContainer.innerHTML = "";
+
+        stations.forEach(station => {
+            if (station.status === "Available") {
+                const row = document.createElement("div");
+                row.className = "row mb-3";
+
+                const a = document.createElement("a");
+                a.href = `/CSs/${station.id}`;
+                a.className = "text-decoration-none text-dark";
+
+                const card = document.createElement("div");
+                card.className = "card p-3 shadow-sm bg-body rounded";
+                card.style.borderColor = "transparent";
+                card.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1">${station.name}</h5>
+                            <p class="mb-1">📍 ${station.location} | ${station.distance_km} km away</p>
+                            <p class="mb-0">Available Ports: ${station.available_ports}</p>
+                        </div>
+                    </div>
+                `;
+
+                a.appendChild(card);
+                row.appendChild(a);
+                listContainer.appendChild(row);
+            }
+        });
+    }
+
+    document.getElementById("auto").addEventListener("click", () => {
+        socket.emit("AutoCS", {
+            position: [10, 14]
+        });
+    });
+
+    socket.on("route_result", (data) => {
+        const listContainer = document.getElementById("cs-list");
+        listContainer.innerHTML = "";
+
+        if (data.error) {
+            listContainer.innerHTML = `<p class="text-danger">${data.error}</p>`;
+            return;
+        }
+
+        const row = document.createElement("div");
+        row.className = "row mb-3 m-0";
+
+        const card = document.createElement("div");
+        card.className = "card p-3 shadow-sm bg-body rounded";
+        card.style.borderColor = "transparent";
+
+        let portsHTML = "";
+        data.ports.forEach(port => {
+            portsHTML += `
+            <a href="#" class="text-decoration-none m-1 portData" portType="${port.type}" style="margin:0px 15px">
+            <div class="card">
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">                    
+                <div class="col d-flex justify-content-between">
+                    ${port.type} · ${port.power_kW} kW
+                    <span class="badge bg-primary ">${port.available}/${port.total}</span>
+                </div>
+                </li>
+            </ul>
+            </div>
+            </a>
+        `;
+        });
+
+        card.innerHTML = `
+            <div class="justify-content-between align-items-center text-center d-flex row" id="ClosestCS">
+                <div class="row p-0 m-0">
+                    <h5 class="mb-3">${data.station_name} | 📍 ${data.station_distance} km Or ${data.path.length} steps away</h5>
+                </div>
+                <div class="d-flex justify-content-around flex-column" id="cs">
+                    ${portsHTML}
+                </div>
+                <div class="d-flex justify-content-around flex-column mt-3">
+                    <div class="card">
+                        Map
+                    </div>
+                </div>
+            </div>
+        `;
+
+        const portLinks = card.querySelectorAll(".portData");
+        portLinks.forEach(link => {
+            link.addEventListener("click", (e) => {
+                e.preventDefault();
+                const portType = link.getAttribute("portType");
+                alert(`The ${portType} port is booked`);
+            });
+        });
+
+        row.appendChild(card);
+        listContainer.appendChild(row);
+
+    });
+
+    document.addEventListener("DOMContentLoaded", loadStations);
+</script>
+{% endblock %}
