@@ -113,7 +113,9 @@ def handleAutoCS(data):
         emit("route_result", {
             "station_id": station["id"],
             "station_name": station["name"],
+            "lat":station["lat"],
+            "lng":station["lng"],
             "station_distance": station["distance_km"],
             "path": path,
-            "ports": CSports
+            "ports": CSports          
         })

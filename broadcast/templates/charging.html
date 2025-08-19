@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Charging{% endblock %}
+{% block styles %}
+<style>
+    #header {
+        height: 120px;
+    }
+
+    #scroll-container {
+        height: 350px;
+        padding-right: 10px;
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+<div id="header">
+    <h2 id="csName" class="m-3 text-center"></h2>
+</div>
+<div class="col d-flex flex-column align-items-center text-center" id="scroll-container">
+    <div class="card p-3 shadow-sm rounded" style="border: transparent; height: 60px;">
+        <p>{{ port }}</p>
+        <img src="/static/images/charging.png" 
+             class="rounded mx-auto d-block m-3 pt-5 mt-3" 
+             style="width: 25%;" />
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/evId.js"></script>
+<script async
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4hZAYtF1aoCvpBx6LM3-hgRlgCRAOszg&callback=console.debug&libraries=maps,marker&v=beta">
+    </script>
+<script>
+        
+        socket.emit("AutoCS", {
+            position: [10, 14]
+        })
+    
+    socket.on("route_result", (data) => {
+        document.getElementById("csName").innerHTML = data.station_name;
+        });
+</script>
+{% endblock %}

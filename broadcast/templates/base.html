@@ -1,44 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="/static/js/evId.js"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
-    <title>{% block title %}EV{% endblock %}</title>
-    {% block styles %}
-    <style>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <script src="/static/js/evId.js"></script>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet">
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+        <title>{% block title %}EV{% endblock %}</title>
+        {% block styles %}
+        <style>
         #header {
             height: 135px;
         }
     </style>
-    {% endblock %}
+        {% endblock %}
 
-</head>
+    </head>
 
-<body>
-    <div style="height: 6rem;"></div>
-    <div class="container-fluid row justify-content-center align-content-center mx-auto d-flex flex-column">
-        <div class="p-4 shadow-lg" id="container"
-            style="width: 38rem; height: 500px; border-radius: 25px; background-color: rgb(206, 231, 245);">
+    <body>
+        <div style="height: 6rem;"></div>
+        <div
+            class="container-fluid row justify-content-center align-content-center mx-auto d-flex flex-column">
+            <div class="p-4 shadow-lg" id="container"
+                style="width: 52rem; height: 560px; border-radius: 25px; background-color: rgb(206, 231, 245);">
 
-            {% block content %}{% endblock %}
+                {% block content %}{% endblock %}
 
-            <div class="col mt-1 justify-content-center text-center align-content-center">
-                <a href="/"><img src="/static/images/home.png" alt="Home" style="width:40px;" /></a>
-                <a href="/CSs"><img src="/static/images/cs.png" alt="Stations" style="width:30px;" /></a>
-                <a href="#" id="ChargeReq">
-                    <img src="/static/images/ev.png" alt="ChargeRequest" class="img-fluid" style="width:30px;" />
-                </a>
+                <div
+                    class="col justify-content-center text-center align-content-center">
+                    <a href="/"><img src="/static/images/home.png" alt="Home"
+                            style="width:40px;" /></a>
+                    <a href="{{ url_for('main.CSList') }}"><img src="/static/images/cs.png"
+                            alt="Stations" style="width:30px;" /></a>
+                    <a href="{{ url_for('main.CSRequest') }}" id="ChargeReq">
+                        <img src="/static/images/ev.png" alt="ChargeRequest"
+                            class="img-fluid" style="width:30px;" />
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="/static/js/evId.js"></script>
-    <script>
+        <script src="/static/js/evId.js"></script>
+        <script>
         const evId = getEVId();
 
         const socket = io({
@@ -47,14 +55,10 @@
             }
         });
 
-        document.getElementById("ChargeReq").addEventListener("click", function () {
-            window.location.href = `/CSReq/${evId}`;
-        });
-
     </script>
 
-    {% block scripts %}{% endblock %}
+        {% block scripts %}{% endblock %}
 
-</body>
+    </body>
 
 </html>
