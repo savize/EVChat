@@ -1,8 +1,6 @@
 from flask import Flask 
-
-from .events import socketio
+from .extensions import db, socketio
 from .routes import main 
-from flask_sqlalchemy import SQLAlchemy
 
 
 def create_app():
@@ -17,7 +15,6 @@ def create_app():
     app.register_blueprint(main)
 
     socketio.init_app(app)
+    db.init_app(app)
 
-    db = SQLAlchemy(app)
-
-    return app, db
+    return app

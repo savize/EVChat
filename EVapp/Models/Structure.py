@@ -1,10 +1,7 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from broadcast import create_app
+from EVapp import db
 from Models.Port import Port
 from Models.CS import ChargingStation
 
-app, db = create_app()
 
 class structure(db.Model):
     __tablename__ = 'structure'
@@ -32,6 +29,3 @@ def addStructure(CS_id, port_id, available, total):
     db.session.commit()
     print(f"Added PortAvailability: CS={CS_id}, Port={port_id}")
 
-if __name__ == '__main__':
-    with app.app_context():
-        addStructure(1, 3, 4, 4)

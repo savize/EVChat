@@ -3,8 +3,7 @@ from flask import *
 import subprocess
 import threading
 import os
-import platform
-import socket
+from .services import *
 
 main = Blueprint("main", __name__)
 
@@ -16,17 +15,24 @@ def index():
 def mapTest():
     return render_template("map.html") 
 
-@main.route("/chat")
-def chat():
-    return render_template("chat.html")
+# @main.route("/chat")
+# def chat():
+#     return render_template("chat.html")
 
-@main.route("/public")
-def public():
-    return render_template("public.html")
+# @main.route("/public")
+# def public():
+#     return render_template("public.html")
 
 @main.route("/CSs")
 def CSList():
-    return render_template("stations.html")
+    return render_template("stations.html", CSList = CSList)
+
+@main.route("/api/CS")
+def sendCS():
+    stations = readCS()
+    data = [{"id": s.id, "name": s.name, "location": s.location, "lat": s.lat, "lng": s.lng, "status": s.status} for s in stations]
+    return jsonify(data)
+
 
 @main.route("/parking")
 def parking():

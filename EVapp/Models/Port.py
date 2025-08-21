@@ -1,8 +1,5 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from broadcast import create_app
+from EVapp import db
 
-app, db = create_app()
 
 # Define the model for the table
 class Port(db.Model):
@@ -24,7 +21,3 @@ def addPort(type, power):
     db.session.commit()
     print(f"Added port: {type}")
 
-
-if __name__ == '__main__':
-    with app.app_context():
-        addPort("Type 1", 45 ) 

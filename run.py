@@ -1,4 +1,4 @@
-from broadcast import create_app, socketio
+from EVapp import create_app, socketio
 
 app = create_app()
 
